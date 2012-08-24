@@ -1,6 +1,6 @@
 upstream <%= node['nginx']['site']['sitename'] %> {
-<%= if node['nginx']['site']['port_based'] then %>
-<%= node['nginx']['site']['server_ports'].each do |port|
+<% if node['nginx']['site']['port_based'] then %>
+<% node['nginx']['site']['server_ports'].each do |port|
   server 127.0.0.1:<%= port %>  
 <% end %>
 <% else %>
