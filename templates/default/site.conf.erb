@@ -1,10 +1,10 @@
 upstream <%= node['nginx']['site']['sitename'] %> {
 <% if node['nginx']['site']['port_based'] then %>
-<% node['nginx']['site']['server_ports'].each do |port|
+  <% node['nginx']['site']['server_ports'].each do |port| %>
   server 127.0.0.1:<%= port %>  
-<% end %>
+  <% end %>
 <% else %>
-  server unix:/tmp/<%= node['nginx']['site']['sitename'] fail_timeout=0;
+  server unix:/tmp/<%= node['nginx']['site']['sitename'] %> fail_timeout=0;
 <% end %>
 }
 
@@ -15,7 +15,7 @@ server {
     
     ssl on;
     ssl_certificate <%= default['nginx']['site']['ssl_cert'] %>;
-    ssl_certificate_key <%= default['nginx']['site']['ssl_key'];
+    ssl_certificate_key <%= default['nginx']['site']['ssl_key'] %>;
     ssl_protocols SSLv3 TLSv1;
     ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
     keepalive_timeout    70;
