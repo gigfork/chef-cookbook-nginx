@@ -2,7 +2,7 @@ maintainer        "AT&T Services, Inc"
 license           ""
 description       "Install nginx"
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version           "0.5"
+version           "0.6"
 
 recipe "nginx", "Install nginx and put into place sites-available|sites-enabled structure"
 recipe "nginx::msource", "Install nginx"
