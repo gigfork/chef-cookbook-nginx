@@ -7,7 +7,7 @@ version           "0.6"
 recipe "nginx", "Install nginx and put into place sites-available|sites-enabled structure"
 recipe "nginx::msource", "Install nginx"
 
-depends "build-essential"
+depends "build-essential", "ssl-cert"
 
 %w{ ubuntu debian redhat centos arch }.each do |os|
   supports os
