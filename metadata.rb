@@ -2,12 +2,12 @@ maintainer        "AT&T Services, Inc"
 license           ""
 description       "Install nginx"
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version           "0.6"
+version           "0.7"
 
 recipe "nginx", "Install nginx and put into place sites-available|sites-enabled structure"
 recipe "nginx::msource", "Install nginx"
 
-depends "build-essential", "ssl-cert"
+depends "build-essential", "ssl-cert", "passenger"
 
 %w{ ubuntu debian redhat centos arch }.each do |os|
   supports os

@@ -12,3 +12,5 @@ set['nginx']['source']['default_configure_flags'] = [
 
 default['nginx']['configure_flags'] = Array.new
 default['nginx']['source']['url']   = "http://nginx.org/download/nginx-#{node['nginx']['version']}.tar.gz"
+default['nginx']['source']['passenger'] = true
+

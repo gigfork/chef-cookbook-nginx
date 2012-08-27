@@ -3,6 +3,10 @@
 # Recipe:: default
 #
 
+if node['nginx']['source']['passenger']
+  include_recipe "nginx::passenger"
+end
+
 nginx_url = node['nginx']['source']['url'] ||
   "http://nginx.org/download/nginx-#{node['nginx']['version']}.tar.gz"
 
