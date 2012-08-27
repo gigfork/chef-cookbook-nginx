@@ -4,7 +4,7 @@ upstream <%= node['nginx']['site']['sitename'] %> {
   server 127.0.0.1:<%= port %>  
   <% end %>
 <% else %>
-  server unix:/tmp/<%= node['nginx']['site']['sitename'] %> fail_timeout=0;
+  server unix:/tmp/<%= node['nginx']['site']['sitename'] %>.sock fail_timeout=0;
 <% end %>
 }
 
@@ -14,8 +14,8 @@ server {
     root /var/www/apps/<%= node['nginx']['site']['sitename'] %>/current/public;
     
     ssl on;
-    ssl_certificate <%= default['nginx']['site']['ssl_cert'] %>;
-    ssl_certificate_key <%= default['nginx']['site']['ssl_key'] %>;
+    ssl_certificate <%= node['nginx']['site']['ssl_cert'] %>;
+    ssl_certificate_key <%= node['nginx']['site']['ssl_key'] %>;
     ssl_protocols SSLv3 TLSv1;
     ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
     keepalive_timeout    70;
