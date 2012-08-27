@@ -23,4 +23,6 @@ bash "fetch-pcre-source" do
 end
 
 node.run_state['nginx_configure_flags'].push("--with-pcre='#{root}'")
-node.run_state['nginx_configure_flags'].push("--add-module=/var/lib/gems/#{ruby-version}/gems/passenger-#{version}/ext/nginx")
+
+proot = node['passenger']['root']
+node.run_state['nginx_configure_flags'].push("--add-module=#{proot}/ext/nginx")
