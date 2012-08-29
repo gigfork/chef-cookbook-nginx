@@ -18,6 +18,7 @@ if not version_str.include? node['nginx']['version'] or
   bash "remove-old" do
     user "root"
     code <<-EOF
+    rm -rf #{workdir}
     dpkg -r "*nginx*" 
     EOF
   end
@@ -91,4 +92,20 @@ ruby_block "post-install" do
     end
   end
   only_if {install}
+end
+
+if node['nginx']['passenger-site'] and 
+   node['nginx']['passenger']['ssl_cert'].include? "snakeoil" then
+  apt_package "ssl-cert"  do
+    action :install
+  end
+end
+
+service "nginx" do
+  action :start
+  supports :start => true, :stop => true, :restart => true, :reload => true, :status => true
+end
+
+if node['nginx']['passenger-site'] then
+  include_recipe "nginx::passenger-site"
 end
