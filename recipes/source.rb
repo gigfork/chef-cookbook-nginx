@@ -94,13 +94,6 @@ ruby_block "post-install" do
   only_if {install}
 end
 
-if node['nginx']['passenger-site'] and 
-   node['nginx']['passenger']['ssl_cert'].include? "snakeoil" then
-  apt_package "ssl-cert"  do
-    action :install
-  end
-end
-
 service "nginx" do
   action :start
   supports :start => true, :stop => true, :restart => true, :reload => true, :status => true
