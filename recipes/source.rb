@@ -39,6 +39,7 @@ bash "build-dep" do
   mkdir -p #{workdir}
   cd #{workdir}
   add-apt-repository #{node['nginx']['ppa']} -y
+  apt-get update
   apt-get build-dep nginx -y
   apt-get install fakeroot -y
   apt-get source nginx='#{node['nginx']['version']}' -y
