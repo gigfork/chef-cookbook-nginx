@@ -47,31 +47,39 @@ bash "build-dep" do
   only_if {install}
 end
 
-ruby_block "add-passenger-module" do
-  block do
-    src_dir = "#{workdir}/nginx-#{node['nginx']['version']}" 
-    text = ::File.read("#{src_dir}/debian/rules")
-    
-    # only add module line if needed. apt-get will not overwrite an existing
-    # source dewnload and files if they already exist resulting in multiple 
-    # patches across runs 
-    if not text.include? "passenger" then
-      proot = `passenger-config --root`.chomp("\n")
-      pmodule = "--add-module=#{proot}/ext/nginx"
-      ::File.open("#{src_dir}/debian/rules", "w") {|file|
-        file.puts text.gsub("$(CONFIGURE_OPTS)", "#{pmodule} \\\n$(CONFIGURE_OPTS)") 
-      }
-    end
+if node['nginx']['passenger-site'] then
+  gem_package "passenger" do
+    action :install
+    ignore_failure false
   end
-  only_if {install}
+
+  ruby_block "add-passenger-module" do
+    block do
+      src_dir = "#{workdir}/nginx-#{node['nginx']['version']}" 
+      text = ::File.read("#{src_dir}/debian/rules")
+      
+      # only add module line if needed. apt-get will not overwrite an existing
+      # source download and files if they already exist resulting in multiple 
+      # patches across runs 
+      if not text.include? "passenger" then
+        proot = `passenger-config --root`.chomp("\n")
+        pmodule = "--add-module=#{proot}/ext/nginx"
+        ::File.open("#{src_dir}/debian/rules", "w") {|file|
+          file.puts text.gsub("$(CONFIGURE_OPTS)", "#{pmodule} \\\n$(CONFIGURE_OPTS)") 
+        }
+      end
+    end
+    only_if {install}
+  end
 end
 
 bash "build-nginx" do 
   user "root"
   cwd "#{workdir}/nginx-#{node['nginx']['version']}"
-  code <<-EOF
+  code <<-EOH
   dpkg-buildpackage -us -uc
-  EOF
+  dpkg-buildpackage -us -uc
+  EOH
   only_if {install}
 end
 
@@ -103,3 +111,4 @@ end
 if node['nginx']['passenger-site'] then
   include_recipe "nginx::passenger-site"
 end
+
