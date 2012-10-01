@@ -1,0 +1,44 @@
+upstream <%= @app_name %> {
+     server 127.0.0.1:5000;
+     server 127.0.0.1:5001;
+     server 127.0.0.1:5002;
+}
+
+server {
+    listen 443;
+    server_name <%= @site_name %>;
+    root /var/www/<%= @app_name %>/current/public;
+    
+    ssl on;
+    ssl_certificate <%= @ssl_cert %>;
+    ssl_certificate_key  <%= @ssl_key %>;
+    ssl_protocols SSLv3 TLSv1;
+    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
+    keepalive_timeout    70;
+    
+    client_max_body_size 10M;
+    client_body_buffer_size 128k;
+
+    location / {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_redirect off;
+
+      if (-f $request_filename/index.html) {
+        rewrite (.*) $1/index.html break;
+      }
+      if (-f $request_filename.html) {
+        rewrite (.*) $1.html break;
+      }
+      if (!-f $request_filename) {
+        proxy_pass http://<%= @app_name %>;
+        break;
+      }
+    }
+
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+      root html;
+    }
+}
