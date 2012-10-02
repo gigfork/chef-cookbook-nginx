@@ -90,6 +90,8 @@ bash "install-nginx" do
   dpkg -i nginx-common_#{node['nginx']['version']}-0ubuntu0ppa3~precise_all.deb
   dpkg -i nginx-full_#{node['nginx']['version']}-0ubuntu0ppa3~precise_amd64.deb
   dpkg -i nginx_#{node['nginx']['version']}-0ubuntu0ppa3~precise_all.deb
+  cd $(passenger-config --root)
+  rake nginx RELEASE=yes
   EOF
   only_if {install}
 end
