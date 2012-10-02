@@ -2,6 +2,8 @@
 # Cookbook Name:: nginx
 # Recipe:: passenger-site
 
+command = Chef::ShellOut.new("passenger-config --root")
+
 if node['nginx']['passenger']['ssl_cert'].include? "snakeoil" then
   include_recipe "ssl-cert"
 end
@@ -20,4 +22,14 @@ template "/etc/nginx/conf.d/passenger-site.conf" do
   )
   notifies :reload, "service[nginx]", :immediately
 
+end
+
+template "/etc/nginx/nginx.conf" do
+  source "nginx.conf.erg"
+  mode 0644
+  owner "root"
+  group "root"
+  variables(
+    :passenger_root => command.run_command.stdout.chomp("\n")
+  )
 end
