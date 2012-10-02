@@ -25,7 +25,7 @@ template "/etc/nginx/conf.d/passenger-site.conf" do
 end
 
 template "/etc/nginx/nginx.conf" do
-  source "nginx.conf.erg"
+  source "nginx.conf.erb"
   mode 0644
   owner "root"
   group "root"
