@@ -49,9 +49,9 @@ end
 
 if node['nginx']['passenger-site'] then
   gem_package "passenger" do
-    action :install
+    action :nothing
     ignore_failure false
-  end
+  end.run_action(:install)
 
   ruby_block "add-passenger-module" do
     block do
