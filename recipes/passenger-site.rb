@@ -10,11 +10,11 @@ end
 
 
 passenger_site "passenger-site" do
-    :site_name => node['nginx']['passenger']['site_name'],
-    :app_name => node['nginx']['passenger']['app_name'],
-    :ssl_cert => node['nginx']['passenger']['ssl_cert'],
-    :ssl_key => node['nginx']['passenger']['ssl_key'],
-    :rails_env => node['nginx']['passenger']['rails_env']
+    site_name  node['nginx']['passenger']['site_name']
+    app_name   node['nginx']['passenger']['app_name']
+    ssl_cert   node['nginx']['passenger']['ssl_cert']
+    ssl_key    node['nginx']['passenger']['ssl_key']
+    rails_env  node['nginx']['passenger']['rails_env']
 end
 
 template "/etc/nginx/nginx.conf" do
