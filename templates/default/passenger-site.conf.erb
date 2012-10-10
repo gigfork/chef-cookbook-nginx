@@ -9,7 +9,7 @@ server {
   server_name <%= @site_name %>;
   root /var/www/<%= @app_name %>/public;
   passenger_enabled on;
-  rails_env production;
+  rails_env <%= @erails_env %>;
 
   ssl on;
   ssl_certificate <%= @ssl_cert %>;
