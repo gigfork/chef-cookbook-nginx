@@ -18,10 +18,12 @@ http {
         error_log /var/log/nginx/error.log;
         gzip on;
         gzip_disable "msie6";
-        
+        <% if @passenger_root %>
+
         passenger_root <%= @passenger_root %>;
         passenger_ruby /usr/bin/ruby;
 
+        <% end %>
         include /etc/nginx/conf.d/*.conf;
         include /etc/nginx/sites-enabled/*;
 }

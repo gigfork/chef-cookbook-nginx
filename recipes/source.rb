@@ -47,7 +47,7 @@ bash "build-dep" do
   only_if {install}
 end
 
-if node['nginx']['passenger-site'] then
+if node['nginx']['passenger'] then
   gem_package "passenger" do
     action :nothing
     ignore_failure false
@@ -110,7 +110,4 @@ service "nginx" do
   supports :start => true, :stop => true, :restart => true, :reload => true, :status => true
 end
 
-if node['nginx']['passenger-site'] then
-  include_recipe "nginx::passenger-site"
-end
-
+include_recipe "nginx::config"

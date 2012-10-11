@@ -7,9 +7,9 @@ server {
 server {
   listen 443;
   server_name <%= @site_name %>;
-  root /var/www/<%= @app_name %>/public;
+  root <%= @root %><%= @app_name %>/public;
   passenger_enabled on;
-  rails_env <%= @erails_env %>;
+  rails_env <%= @rails_env %>;
 
   ssl on;
   ssl_certificate <%= @ssl_cert %>;
