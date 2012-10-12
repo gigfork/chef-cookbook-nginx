@@ -15,4 +15,7 @@ template "/etc/nginx/nginx.conf" do
   variables(
     :passenger_root => proot
   )
+  notifies :reload, "service[nginx]"
 end
+
+include_recipe "nginx::no_default_site"

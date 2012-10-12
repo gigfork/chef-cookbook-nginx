@@ -2,7 +2,7 @@
 # Cookbook Name:: nginx
 # Recipe:: source
 
-include_recipe "build-essential"
+include_recipe "nginx::service"
 
 version   = node['nginx']['version']
 workdir = "#{Chef::Config['file_cache_path']}/build_nginx" || '/tmp/build_nginx'
@@ -103,11 +103,6 @@ ruby_block "post-install" do
     end
   end
   only_if {install}
-end
-
-service "nginx" do
-  action :start
-  supports :start => true, :stop => true, :restart => true, :reload => true, :status => true
 end
 
 include_recipe "nginx::config"
