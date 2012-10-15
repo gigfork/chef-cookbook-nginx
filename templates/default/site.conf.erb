@@ -6,7 +6,7 @@ server {
 
 server {
   listen 443;
-  server_name <%= @site_name %>;
+  server_name <%= @fqdn %>;
   root <%= @root %><%= @app_name %>/public;
 
   ssl on;
