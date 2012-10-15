@@ -5,7 +5,7 @@ action :create do
     mode 0644
     owner "root"
     group "root"
-    variables :site_name => new_resource.name,
+    variables :fqdn      => new_resource.name,
               :ssl_cert  => new_resource.ssl_cert,
               :ssl_key   => new_resource.ssl_key,
               :root      => new_resource.root
