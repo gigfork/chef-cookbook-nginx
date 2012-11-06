@@ -2,18 +2,17 @@
 # Cookbook Name:: nginx
 # Recipe:: source
 
-include_recipe "nginx::service"
-
-version   = node['nginx']['version']
+version = node['nginx']['version']
 workdir = "#{Chef::Config['file_cache_path']}/build_nginx" || '/tmp/build_nginx'
 Chef::Log.info "Build directory set to #{workdir}"
 
 version_str = `dpkg -l nginx | awk '/ii/{print $3}'`
-install = false
+install     = false
 
 if not version_str.include? node['nginx']['version'] or
   node['nginx']['force'] then
   install = true
+  Chef::Log.info "cleaning up old working directory"
   # we clean that up first if they exist
   bash "remove-old" do
     user "root"
@@ -34,7 +33,9 @@ end
 
 # Install build dependencies
 bash "build-dep" do
+  Chef::Log.info "installing source package nginx=#{node['nginx']['version']}"
   user "root"
+  cwd  Chef::Config['file_cache_path']
   code <<-EOF
   mkdir -p #{workdir}
   cd #{workdir}
@@ -74,6 +75,8 @@ if node['nginx']['passenger'] then
 end
 
 bash "build-nginx" do 
+  Chef::Log.info "building Nginx..."
+
   user "root"
   cwd "#{workdir}/nginx-#{node['nginx']['version']}"
   code <<-EOH
@@ -84,12 +87,14 @@ bash "build-nginx" do
 end
 
 bash "install-nginx" do
+  Chef::Log.info "Installing Nginx from source package..."
+
   user "root"
   cwd workdir
   code <<-EOF
-  dpkg -i nginx-common_#{node['nginx']['version']}-0ubuntu0ppa3~precise_all.deb
-  dpkg -i nginx-full_#{node['nginx']['version']}-0ubuntu0ppa3~precise_amd64.deb
-  dpkg -i nginx_#{node['nginx']['version']}-0ubuntu0ppa3~precise_all.deb
+  dpkg -i nginx-common_#{node['nginx']['version']}-2ubuntu0ppa1~precise_all.deb
+  dpkg -i nginx-full_#{node['nginx']['version']}-2ubuntu0ppa1~precise_amd64.deb
+  dpkg -i nginx_#{node['nginx']['version']}-2ubuntu0ppa1~precise_all.deb
   cd $(passenger-config --root)
   rake nginx RELEASE=yes
   EOF
@@ -106,3 +111,4 @@ ruby_block "post-install" do
 end
 
 include_recipe "nginx::config"
+include_recipe "nginx::service"
