@@ -92,9 +92,9 @@ bash "install-nginx" do
   user "root"
   cwd workdir
   code <<-EOF
-  dpkg -i nginx-common_#{node['nginx']['version']}-2ubuntu0ppa1~precise_all.deb
-  dpkg -i nginx-full_#{node['nginx']['version']}-2ubuntu0ppa1~precise_amd64.deb
-  dpkg -i nginx_#{node['nginx']['version']}-2ubuntu0ppa1~precise_all.deb
+  dpkg -i nginx-common_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_all.deb
+  dpkg -i nginx-full_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_amd64.deb
+  dpkg -i nginx_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_all.deb
   cd $(passenger-config --root)
   rake nginx RELEASE=yes
   EOF
