@@ -18,7 +18,7 @@ if not version_str.include? node['nginx']['version'] or
     user "root"
     code <<-EOF
     rm -rf #{workdir}
-    dpkg -r "*nginx*" 
+    apt-get purge nginx nginx-full nginx-common
     EOF
   end
 end
@@ -104,7 +104,8 @@ end
 ruby_block "post-install" do
   block do
     if not node['nginx']['config']['default'] then
-      ::File.delete("/etc/nginx/sites-enabled/default")
+      file = "/etc/nginx/sites-enabled/default"
+      ::File.delete(file) if ::File.exists?(file)
     end
   end
   only_if {install}
