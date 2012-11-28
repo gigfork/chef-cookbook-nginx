@@ -11,14 +11,14 @@ install     = false
 
 if not version_str.include? node['nginx']['version'] or
   node['nginx']['force'] then
-  install = true
   Chef::Log.info "cleaning up old working directory"
+  install = true
   # we clean that up first if they exist
   bash "remove-old" do
     user "root"
     code <<-EOF
     rm -rf #{workdir}
-    apt-get purge nginx nginx-full nginx-common
+    apt-get purge nginx nginx-full nginx-common -y
     EOF
   end
 end
