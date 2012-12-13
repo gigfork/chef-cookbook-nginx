@@ -101,15 +101,6 @@ bash "install-nginx" do
   only_if {install}
 end
 
-ruby_block "post-install" do
-  block do
-    if not node['nginx']['config']['default'] then
-      file = "/etc/nginx/sites-enabled/default"
-      ::File.delete(file) if ::File.exists?(file)
-    end
-  end
-  only_if {install}
-end
-
 include_recipe "nginx::config"
 include_recipe "nginx::service"
+include_recipe "nginx::sites" if not node['nginx']['sites'].nil?

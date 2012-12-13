@@ -13,3 +13,4 @@ package "nginx" do
 end
 
 include_recipe "nginx::config"
+include_recipe "nginx::sites" if node['nginx']['sites']
