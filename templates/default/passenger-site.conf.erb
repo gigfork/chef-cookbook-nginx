@@ -7,7 +7,7 @@ server {
 server {
   listen 443;
   server_name <%= @site_name %>;
-  root <%= @root %><%= @app_name %>/public;
+  root <%= @docroot %>;
   passenger_enabled on;
   rails_env <%= @rails_env %>;
 
