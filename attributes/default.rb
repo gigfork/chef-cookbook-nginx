@@ -8,4 +8,5 @@ default['nginx']['force'] = nil
 default['nginx']['sites'] = nil
 
 ## passenger 
-default['nginx']['passenger'] = nil
+default['nginx']['passenger']['enable'] = nil
+default['nginx']['passenger']['version'] = "3.0.18"

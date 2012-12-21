@@ -1,6 +1,7 @@
 #
 # Cookbook Name:: nginx
 # Recipe:: source
+include_recipe "ssl-cert"
 
 version = node['nginx']['version']
 workdir = "#{Chef::Config['file_cache_path']}/build_nginx" || '/tmp/build_nginx'
@@ -48,11 +49,13 @@ bash "build-dep" do
   only_if {install}
 end
 
-if node['nginx']['passenger'] then
+if node['nginx']['passenger']['enable'] then
   gem_package "passenger" do
-    action :nothing
+    action :install
     ignore_failure false
-  end.run_action(:install)
+  end
+  proot = "#{node['languages']['ruby']['gems_dir']}/gems/"
+  proot << "passenger-#{node['nginx']['passenger']['version']}" 
 
   ruby_block "add-passenger-module" do
     block do
@@ -101,6 +104,16 @@ bash "install-nginx" do
   only_if {install}
 end
 
-include_recipe "nginx::config"
+template "/etc/nginx/nginx.conf" do
+  source "nginx.conf.erb"
+  mode 0644
+  owner "root"
+  group "root"
+  variables(
+    :passenger_root => proot
+  )
+  notifies :reload, "service[nginx]"
+end
+
 include_recipe "nginx::service"
 include_recipe "nginx::sites" if not node['nginx']['sites'].nil?
