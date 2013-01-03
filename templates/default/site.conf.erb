@@ -1,8 +1,19 @@
 <% @servers.each do |server| %>
 server {
 <% server.each do |key, value| %>
-<% next if value.nil? -%>
+  <% next if value.nil? -%>
+  <% if not key.eql? "locations" then %>
   <%= key %> <%= value %>;
+<% else %>
+  <% value.each do |path, values|  %>
+  location <%= path %> {
+  <% values.each do |key, value| %>
+    <% next if value.nil? -%>
+    <%= key %> <%= value %>;
+  <% end %>
+  } 
+  <% end %>
+  <% end %>
 <% end %>
 }
 <% end %>
