@@ -89,19 +89,35 @@ bash "build-nginx" do
   only_if {install}
 end
 
-bash "install-nginx" do
-  Chef::Log.info "Installing Nginx from source package..."
+if node['nginx']['passenger']['enable'] then
+  bash "install-nginx" do
+    Chef::Log.info "Installing Nginx from source package..."
 
-  user "root"
-  cwd workdir
-  code <<-EOF
-  dpkg -i nginx-common_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_all.deb
-  dpkg -i nginx-full_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_amd64.deb
-  dpkg -i nginx_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_all.deb
-  cd $(passenger-config --root)
-  rake nginx RELEASE=yes
-  EOF
-  only_if {install}
+    user "root"
+    cwd workdir
+    code <<-EOF
+    dpkg -i nginx-common_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_all.deb
+    dpkg -i nginx-full_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_amd64.deb
+    dpkg -i nginx_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_all.deb
+    cd $(passenger-config --root)
+    rake nginx RELEASE=yes
+    EOF
+    only_if {install}
+  end
+else
+  bash "install-nginx" do
+    Chef::Log.info "Installing Nginx from source package..."
+
+    user "root"
+    cwd workdir
+    code <<-EOF
+    dpkg -i nginx-common_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_all.deb
+    dpkg -i nginx-full_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_amd64.deb
+    dpkg -i nginx_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_all.deb
+    EOF
+    only_if {install}
+  end
+
 end
 
 template "/etc/nginx/nginx.conf" do
