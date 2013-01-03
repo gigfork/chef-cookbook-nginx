@@ -84,14 +84,16 @@ bash "build-nginx" do
   cwd "#{workdir}/nginx-#{node['nginx']['version']}"
   code <<-EOH
   dpkg-buildpackage -us -uc
-  dpkg-buildpackage -us -uc
+  # we did need to call this twice or the build would fail, seems to not be 
+  # required anymore
+  # dpkg-buildpackage -us -uc
   EOH
   only_if {install}
 end
 
 if node['nginx']['passenger']['enable'] then
   bash "install-nginx" do
-    Chef::Log.info "Installing Nginx from source package..."
+    Chef::Log.info "Installing Nginx from source package with passenger support..."
 
     user "root"
     cwd workdir
