@@ -17,3 +17,12 @@ server {
 <% end %>
 }
 <% end %>
+
+<% @upstreams.each do |upstream| %>
+upstream {
+  <% upstream.each do |key, value| %>
+    <% next if value.nil? %>
+  <%= key %> <%= value %>;
+  <% end %>
+}
+<% end %>

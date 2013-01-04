@@ -5,7 +5,9 @@ action :create do
     mode 0644
     owner "root"
     group "root"
-    variables :fqdn => new_resource.name, :servers => new_resource.servers
+    variables :fqdn => new_resource.name, 
+              :servers => new_resource.servers,
+              :upstreams => new_resource.upstreams
     notifies :reload, "service[nginx]", :immediately
   end
 end
