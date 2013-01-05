@@ -24,7 +24,8 @@ begin
   bag['sites'].each do |fqdn,confs|
     Chef::Log.info "Configuring the #{fqdn} nginx site...."
     nginx_site fqdn do
-      servers confs
+      servers confs['servers'] if confs['servers']
+      upstreams confs['upstreams'] if confs['upstreams']
       action :create
     end
   end
