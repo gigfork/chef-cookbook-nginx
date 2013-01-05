@@ -17,3 +17,18 @@ server {
 <% end %>
 }
 <% end %>
+
+<% @upstreams.each do |name, upstream| %>
+upstream <%= name %> {
+  <% upstream.each do |key, value| %>
+    <% next if value.nil? %>
+    <% if not value.kind_of? Array %>
+  <%= key %> <%= value %>;
+    <% else %>
+      <% value.each do |val| %>
+  <%= key %> <%= val %>;
+      <% end %>
+    <% end %>
+  <% end %>
+}
+<% end %>
