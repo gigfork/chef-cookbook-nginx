@@ -52,6 +52,7 @@ end
 if node['nginx']['passenger']['enable'] then
   gem_package "passenger" do
     action :install
+    version node['nginx']['passenger']['version']
     ignore_failure false
   end
   proot = "#{node['languages']['ruby']['gems_dir']}/gems/"
