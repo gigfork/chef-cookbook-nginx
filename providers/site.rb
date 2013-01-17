@@ -8,7 +8,7 @@ action :create do
     variables :fqdn => new_resource.name, 
               :servers => new_resource.servers,
               :upstreams => new_resource.upstreams
-    notifies :reload, "service[nginx]", :immediately
+    notifies :reload, "service[nginx]"
   end
 end
 
