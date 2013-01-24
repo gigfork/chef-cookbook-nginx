@@ -85,9 +85,6 @@ bash "build-nginx" do
   cwd "#{workdir}/nginx-#{node['nginx']['version']}"
   code <<-EOH
   dpkg-buildpackage -us -uc
-  # we did need to call this twice or the build would fail, seems to not be 
-  # required anymore
-  # dpkg-buildpackage -us -uc
   EOH
   only_if {install}
 end
@@ -103,6 +100,8 @@ if node['nginx']['passenger']['enable'] then
     dpkg -i nginx-full_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_amd64.deb
     dpkg -i nginx_#{node['nginx']['version']}-?ubuntu0ppa?\~precise_all.deb
     cd $(passenger-config --root)
+    rake nginx RELEASE=yes
+    # don't ask me why I have to build it twice
     rake nginx RELEASE=yes
     EOF
     only_if {install}
