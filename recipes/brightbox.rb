@@ -25,7 +25,7 @@ template "/etc/nginx/nginx.conf" do
   owner "root"
   group "root"
   variables(
-    :passenger_root => "#{node['languages']['ruby']['gems_dir']}/gems/passenger-#{node['nginx']['passenger']['version']}"
+    :passenger_root => "/usr/lib/phusion-passenger"
   )
   notifies :reload, "service[nginx]"
 end
